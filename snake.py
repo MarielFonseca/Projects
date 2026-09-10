@@ -107,10 +107,8 @@ def check_collisions(snake):
 
     # checks for collisions with wall
     if x < 0 or x >= GAME_WIDTH:
-        # TODO: PRINT "GAME OVER" ON THE SCREEN
         return True
     elif y < 0 or y >= GAME_HEIGHT:
-        # TODO: PRINT "GAME OVER" ON THE SCREEN
         return True
     
     # check for collisions with itself
@@ -129,6 +127,34 @@ def game_over():
                        font = ('helvetica', 35, 'bold'), 
                        text = 'GAME OVER',
                        fill = 'red')
+
+    # start over button, calls start game method
+    button = Button(canvas, 
+                    text = "Try again",
+                    font = ('helvetica', 25, 'bold'), 
+                    foreground = 'white',
+                    background = 'green',
+                    command = start_game)
+    canvas.create_window(canvas.winfo_width() / 2,
+                         canvas.winfo_height() / 2 + 45,
+                         window= button)
+
+
+
+def start_game():
+    global snake, food, direction, score
+
+    canvas.delete(ALL)
+    score = 0
+    direction = 'down'
+
+    label.config(text = f'Score: {score}')
+
+    snake = Snake()
+    food = Food()
+    
+    next_turn(snake, food)
+
 
 # other variables
 score = 0
