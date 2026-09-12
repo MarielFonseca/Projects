@@ -132,6 +132,18 @@ reset_button.pack(side= 'top')
 frame = Frame(window)
 frame.pack()
 
+#center on screen
+SCREEN_WIDTH = window.winfo_screenwidth()
+SCREEN_HEIGHT = window.winfo_screenheight()
+WINDOW_WIDTH = 450
+WINDOW_HEIGHT = 350
+
+x = (SCREEN_WIDTH - WINDOW_WIDTH) // 2
+y = (SCREEN_HEIGHT - WINDOW_HEIGHT) // 2
+
+window.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x}+{y}")
+
+# coloring the buttons
 style = ttk.Style() # use ttk for buttons because otherwise the coloring doesnt show
 style.theme_use('clam')
 style.configure('Win.TButton', background = 'green') # color for winning
