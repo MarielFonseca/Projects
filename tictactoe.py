@@ -45,18 +45,30 @@ def check_winner():
     
     for row in range(3): # checking horizontal conditions
         if buttons[row][0]['text'] == buttons[row][1]['text'] == buttons[row][2]['text'] != '':
+            buttons[row][0].config(style='Win.TButton')
+            buttons[row][1].config(style='Win.TButton')
+            buttons[row][2].config(style='Win.TButton')
             return True
 
     for column in range(3): # checking vertical conditions
         if buttons[0][column]['text'] == buttons[1][column]['text'] == buttons[2][column ]['text'] != '':
+            buttons[0][column].config(style='Win.TButton') 
+            buttons[1][column].config(style='Win.TButton')
+            buttons[2][column].config(style='Win.TButton')
             return True
 
     # checking diagonal conditions from left
     if buttons[0][0]['text'] == buttons[1][1]['text'] == buttons[2][2]['text'] != '':
+        buttons[0][0].config(style='Win.TButton')
+        buttons[1][1].config(style='Win.TButton')
+        buttons[2][2].config(style='Win.TButton')
         return True
 
     # checking diagonal conditions from right
     elif buttons[0][2]['text'] == buttons[1][1]['text'] == buttons[2][0]['text'] != '':
+        buttons[0][2].config(style='Win.TButton')
+        buttons[1][1].config(style='Win.TButton')
+        buttons[2][0].config(style='Win.TButton')
         return True
 
     # checking for empty spaces
@@ -81,7 +93,6 @@ def empty_spaces():
     
 
 def new_game():
-
     # TODO: reset board
     pass
 
@@ -102,11 +113,17 @@ reset_button.pack(side= 'top')
 frame = Frame(window)
 frame.pack()
 
+style = ttk.Style() # use ttk for buttons because otherwise the coloring doesnt show
+style.theme_use('clam')
+style.configure('Win.TButton', background = 'green')
+style.configure('TButton', font = ('helvetica', 20), padding = 20)
+style.map('Win.TButton', background = [('active', 'green'),('!active', 'green')]) # remove annoying hover/active state that comes with the clam theme
+
 
 for row in range(3):
     for column in range(3):
-        buttons[row][column] = Button(frame, text= "", 
-                                      width= 5, height= 2, font = ('helvetica', 20), 
+        buttons[row][column] = ttk.Button(frame, text= "", 
+                                      width= 5, 
                                       command= lambda row=row, column=column : next_turn(row, column))
         buttons[row][column].grid(row=row, column=column)
 
