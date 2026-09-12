@@ -98,8 +98,22 @@ def empty_spaces():
     
 
 def new_game():
-    # TODO: reset board
-    pass
+    # reset board
+    global player
+
+    player = random.choice(players)
+
+    for row in range(3):
+        for column in range(3):
+            if buttons[row][column]['text'] != "":
+                buttons[row][column]['text'] = ""
+                buttons[row][column].config(style='TButton')
+
+    if player == players[0]:
+        label.config(text= players[0] + " turn")
+    else:
+        label.config(text= players[1] + " turn")
+
 
 window = Tk()
 window.title("tictactoe")
