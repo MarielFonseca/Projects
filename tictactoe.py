@@ -73,6 +73,11 @@ def check_winner():
 
     # checking for empty spaces
     elif empty_spaces() is False:
+
+        for row in range(3):
+            for column in range(3):
+                buttons[row][column].config(style='Tie.TButton')
+
         return "Tie"
 
     else: # no winner and no tie
@@ -115,10 +120,12 @@ frame.pack()
 
 style = ttk.Style() # use ttk for buttons because otherwise the coloring doesnt show
 style.theme_use('clam')
-style.configure('Win.TButton', background = 'green')
-style.configure('TButton', font = ('helvetica', 20), padding = 20)
-style.map('Win.TButton', background = [('active', 'green'),('!active', 'green')]) # remove annoying hover/active state that comes with the clam theme
-
+style.configure('Win.TButton', background = 'green') # color for winning
+style.configure('Tie.TButton', background = 'yellow') # color for tie
+style.configure('TButton', font = ('helvetica', 30), padding = 20)
+# the following removes the annoyinh hover/active state that comes with the clam theme
+style.map('Win.TButton', background = [('active', 'green'),('!active', 'green')]) 
+style.map('Tie.TButton', background = [('active', 'yellow'),('!active', 'yellow')])
 
 for row in range(3):
     for column in range(3):
