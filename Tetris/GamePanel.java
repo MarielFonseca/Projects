@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -11,12 +12,16 @@ public class GamePanel extends JPanel implements Runnable{
     public static final int HEIGHT = 629;
     final int FPS = 60;
     Thread thread; 
+    PlayManager playManager;
 
    public GamePanel() {
         // panel settings
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));  
         this.setBackground(Color.BLACK);
         this.setLayout(null);
+
+        playManager = new PlayManager();
+
    }
 
    public void launchGame() { // launch by activating thread
@@ -50,12 +55,14 @@ public class GamePanel extends JPanel implements Runnable{
 
    public void update() {
 
+        playManager.update();
+
    }
 
    public void paintComponent(Graphics g) {
-    super.paintComponent(g);
-   }
+        super.paintComponent(g);
 
-   
-    
+        Graphics2D g2 = (Graphics2D)g;
+        playManager.draw(g2);
+   }
 }
