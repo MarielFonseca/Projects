@@ -1,34 +1,29 @@
 package Tetris;
 import javax.swing.JFrame;
 
-public class tetris {
-   public static final int WIDTH = 445;
-   public static final int HEIGHT = 629;
 
-   private Board board;
-   private Title title;
+public class GameWindow {
+
    private JFrame window;
 
-   public tetris() {
+   public GameWindow() {
 
-    window = new JFrame("Tetris");
-    window.setSize(WIDTH, HEIGHT);
-    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    window.setLocationRelativeTo(null);
-    window.setResizable(false);
+      window = new JFrame("Tetris");
+      window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      window.setResizable(false);
 
-    board = new Board();
-    title = new Title();
+      // add GamePanel to the window
+      GamePanel panel = new GamePanel();
+      window.add(panel);
+      window.pack();
 
-    window.addKeyListener(board);
-    window.addKeyListener(title);
-    window.add(title);
-    window.setVisible(true);
+      window.setLocationRelativeTo(null);    
+      window.setVisible(true);
 
    }
 
    public static void main(String[] args) {
-    new tetris();
+    new GameWindow();
    }
 
 }
