@@ -1,4 +1,4 @@
-package Tetris;
+package main;
 
 import javax.swing.JPanel;
 import java.awt.Color;
