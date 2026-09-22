@@ -8,8 +8,8 @@ import java.awt.Graphics2D;
 
 public class GamePanel extends JPanel implements Runnable{
 
-    public static final int WIDTH = 445;
-    public static final int HEIGHT = 629;
+    public static final int WIDTH = 1050; //445;
+    public static final int HEIGHT = 700;
     final int FPS = 60;
     Thread thread; 
     PlayManager playManager;
@@ -49,8 +49,7 @@ public class GamePanel extends JPanel implements Runnable{
                 repaint();
                 delta--;
             }
-        }
-        throw new UnsupportedOperationException("Unimplemented method 'run'");
+          }
    }
 
    public void update() {
