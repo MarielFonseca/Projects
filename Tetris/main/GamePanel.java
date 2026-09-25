@@ -22,6 +22,10 @@ public class GamePanel extends JPanel implements Runnable{
 
         playManager = new PlayManager();
 
+        // add key listener
+        this.addKeyListener(new KeyHandler());
+        this.setFocusable(true);
+
    }
 
    public void launchGame() { // launch by activating thread

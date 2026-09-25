@@ -19,6 +19,8 @@ public class GameWindow {
 
       window.setLocationRelativeTo(null);    
       window.setVisible(true);
+
+      panel.launchGame();
    }
 
    public static void main(String[] args) {

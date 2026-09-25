@@ -1,5 +1,5 @@
 package mino;
 
-public class Mino_T {
+public class Mino_T extends Mino {
     
 }

@@ -6,6 +6,10 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import mino.Block;
+import mino.Mino;
+import mino.Mino_L1;
+
 public class PlayManager { // point of this class is to draw the play area
 
     // handles tetrominoes and handles game play action like deleting lines, adding scorrs, etc.
@@ -18,16 +22,35 @@ public class PlayManager { // point of this class is to draw the play area
     public static int top_y;
     public static int bottomt_y;
 
+
+    // mino
+    Mino currentMino;
+    final int MINO_START_X;
+    final int MINO_START_Y;
+
+    // others
+    public static int dropInterval = 15;
+
+
     public PlayManager() {
 
         left_x = (GamePanel.WIDTH/2) - (WIDTH/2);
         right_x = left_x + WIDTH;
         top_y = 50;
         bottomt_y = top_y + HEIGHT;
+
+        // starting positions, middle top of frame
+        MINO_START_X = left_x + (WIDTH/2) - Block.SIZE;
+        MINO_START_Y = top_y + Block.SIZE;
+
+        // set mino
+        currentMino = new Mino_L1();
+        currentMino.setXY(MINO_START_X, MINO_START_Y);
+
     }
 
     public void update() {
-
+        currentMino.update();
     }
 
     public void draw(Graphics2D g2) {
@@ -44,6 +67,11 @@ public class PlayManager { // point of this class is to draw the play area
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2.drawString("NEXT", x+60, y+60);
         g2.setColor(Color.WHITE);
+
+        // draw current mino
+        if (currentMino != null) {
+            currentMino.draw(g2);
+        }
 
         
     }
