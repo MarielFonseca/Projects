@@ -32,7 +32,19 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
     public void getDirection2() {}
     public void getDirection3() {}
     public void getDirection4() {}
-    public void updateXY(int direction) {    }
+    public void updateXY(int direction) { 
+       
+        this.direction = direction;
+
+        block[0].x = tempBlock[0].x;
+        block[0].y = tempBlock[0].y;
+        block[1].x = tempBlock[1].x;
+        block[1].y = tempBlock[1].y;
+        block[2].x = tempBlock[2].x;
+        block[2].y = tempBlock[2].y;
+        block[3].x = tempBlock[3].x;
+        block[3].y = tempBlock[3].y;
+       }
     
     public void update() {    
         autoDropCounter ++; // counter increases in every frame,
@@ -58,7 +70,13 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
 
             }
             if (KeyHandler.upPressed) {
-                
+                switch (direction) {
+                    case 1: getDirection2();break;
+                    case 2: getDirection3();break;
+                    case 3: getDirection4();break;
+                    case 4: getDirection1();break;
+                }
+                KeyHandler.upPressed = false;
             }
             if (KeyHandler.leftPressed) {
 
