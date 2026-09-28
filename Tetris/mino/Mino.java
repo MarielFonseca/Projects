@@ -48,6 +48,32 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
     
     public void update() {    
         autoDropCounter ++; // counter increases in every frame,
+        
+        if (KeyHandler.upPressed) {
+                switch (direction) {
+                    case 1: getDirection2();break;
+                    case 2: getDirection3();break;
+                    case 3: getDirection4();break;
+                    case 4: getDirection1();break;
+                }
+                KeyHandler.upPressed = false;
+            }
+
+        if (KeyHandler.leftPressed) {
+            block[0].x -= Block.SIZE;
+            block[1].x -= Block.SIZE;
+            block[2].x -= Block.SIZE;
+            block[3].x -= Block.SIZE;
+            KeyHandler.leftPressed = false;
+        }
+        if (KeyHandler.rightPressed) {
+            block[0].x += Block.SIZE;
+            block[1].x += Block.SIZE;
+            block[2].x += Block.SIZE;
+            block[3].x += Block.SIZE;
+            KeyHandler.rightPressed = false;
+        }
+        
         if (autoDropCounter == PlayManager.dropInterval) {
             // mino goes down
             block[0].y += Block.SIZE;
@@ -69,35 +95,6 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
                 KeyHandler.downPressed = false;
 
             }
-            if (KeyHandler.upPressed) {
-                switch (direction) {
-                    case 1: getDirection2();break;
-                    case 2: getDirection3();break;
-                    case 3: getDirection4();break;
-                    case 4: getDirection1();break;
-                }
-                KeyHandler.upPressed = false;
-            }
-            if (KeyHandler.leftPressed) {
-
-                block[0].x -= Block.SIZE;
-                block[1].x -= Block.SIZE;
-                block[2].x -= Block.SIZE;
-                block[3].x -= Block.SIZE;
-                
-                KeyHandler.leftPressed = false;
-                
-            }
-            if (KeyHandler.rightPressed) {
-                block[0].x += Block.SIZE;
-                block[1].x += Block.SIZE;
-                block[2].x += Block.SIZE;
-                block[3].x += Block.SIZE;
-                
-                KeyHandler.rightPressed = false;
-            }
-
-
         }
     }
 
