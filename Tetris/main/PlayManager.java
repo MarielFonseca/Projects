@@ -95,10 +95,12 @@ public class PlayManager { // point of this class is to draw the play area
         // draw current mino
         if (currentMino != null) {
             currentMino.draw(g2);
+        }   
+
+        g2.setColor(Color.YELLOW);
+        g2.setFont(g2.getFont().deriveFont(50f) );
+        if (KeyHandler.pausePressed) {
+            g2.drawString("PAUSED", left_x + 76, top_y + 300);
         }
-
-        
-    }
-
-    
+    }   
 }
