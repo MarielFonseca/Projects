@@ -12,6 +12,7 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
     public Block tempBlock[] = new Block[4];
     public int autoDropCounter = 0;
     public int direction = 1; // there are four directions 1-4
+    public boolean leftCollision, rightCollision, bottomCollision;
 
     public void create(Color color) {
         block[0] = new Block(color);
@@ -26,12 +27,33 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
     }
 
     // used by daugther classes
-    // TODO: implement direction change
-    public void setXY(int x, int y) {    }
+    public void setXY(int x, int y) {}
     public void getDirection1() {}
     public void getDirection2() {}
     public void getDirection3() {}
     public void getDirection4() {}
+
+    public void checkMovementCollision() {
+
+        leftCollision = false;
+        rightCollision = false;
+        bottomCollision = false;
+
+        for (int i = 0; i < block.length; i++) {
+            if (block[i].x == PlayManager.left_x) {
+                leftCollision = true;
+            }
+            if (block[i].x + Block.SIZE == PlayManager.right_x) {
+                rightCollision = true;
+            }
+            if (block[i].y + Block.SIZE == PlayManager.bottomt_y) {
+                bottomCollision = true;
+            }
+        }
+    }
+    public void checkRotationCollision() {}
+        
+
     public void updateXY(int direction) { 
        
         this.direction = direction;
@@ -59,41 +81,49 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
                 KeyHandler.upPressed = false;
             }
 
+        checkMovementCollision();
+
         if (KeyHandler.leftPressed) {
-            block[0].x -= Block.SIZE;
-            block[1].x -= Block.SIZE;
-            block[2].x -= Block.SIZE;
-            block[3].x -= Block.SIZE;
-            KeyHandler.leftPressed = false;
+            if (leftCollision == false) {
+                block[0].x -= Block.SIZE;
+                block[1].x -= Block.SIZE;
+                block[2].x -= Block.SIZE;
+                block[3].x -= Block.SIZE;
+                KeyHandler.leftPressed = false;
+            }
+            
         }
         if (KeyHandler.rightPressed) {
-            block[0].x += Block.SIZE;
-            block[1].x += Block.SIZE;
-            block[2].x += Block.SIZE;
-            block[3].x += Block.SIZE;
-            KeyHandler.rightPressed = false;
+            if (rightCollision == false) {
+                block[0].x += Block.SIZE;
+                block[1].x += Block.SIZE;
+                block[2].x += Block.SIZE;
+                block[3].x += Block.SIZE;
+                KeyHandler.rightPressed = false;
+            }
         }
         
         if (autoDropCounter == PlayManager.dropInterval) {
             // mino goes down
-            block[0].y += Block.SIZE;
-            block[1].y += Block.SIZE;
-            block[2].y += Block.SIZE;
-            block[3].y += Block.SIZE;
-            autoDropCounter = 0; // reset
-
-            // move the mino
-            if (KeyHandler.downPressed) {
-
+            if (bottomCollision == false) {
                 block[0].y += Block.SIZE;
                 block[1].y += Block.SIZE;
                 block[2].y += Block.SIZE;
                 block[3].y += Block.SIZE;
-                
-                autoDropCounter = 0;
+                autoDropCounter = 0; // reset
+            }
 
+            // move the mino
+            if (KeyHandler.downPressed) {
+                if (bottomCollision == false) {
+                    block[0].y += Block.SIZE;
+                    block[1].y += Block.SIZE;
+                    block[2].y += Block.SIZE;
+                    block[3].y += Block.SIZE;
+
+                    autoDropCounter = 0;
+                }
                 KeyHandler.downPressed = false;
-
             }
         }
     }
@@ -107,5 +137,4 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
         g2.fillRect(block[2].x + margin, block[2].y + margin, Block.SIZE - (margin*2), Block.SIZE - (margin*2));
         g2.fillRect(block[3].x + margin, block[3].y + margin, Block.SIZE - (margin*2), Block.SIZE - (margin*2));
     }
-    
 }
