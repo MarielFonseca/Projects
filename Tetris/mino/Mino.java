@@ -13,6 +13,7 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
     public int autoDropCounter = 0;
     public int direction = 1; // there are four directions 1-4
     public boolean leftCollision, rightCollision, bottomCollision;
+    public boolean active = true;
 
     public void create(Color color) {
         block[0] = new Block(color);
@@ -51,25 +52,44 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
             }
         }
     }
-    public void checkRotationCollision() {}
-        
+
+    public void checkRotationCollision() {
+        leftCollision = false;
+        rightCollision = false;
+        bottomCollision = false;
+
+        for (int i = 0; i < block.length; i++) {
+            if (tempBlock[i].x < PlayManager.left_x) {
+                leftCollision = true;
+            }
+            if (tempBlock[i].x + Block.SIZE > PlayManager.right_x) {
+                rightCollision = true;
+            }
+            if (tempBlock[i].y + Block.SIZE > PlayManager.bottomt_y) {
+                bottomCollision = true;
+            }
+        }
+    }
 
     public void updateXY(int direction) { 
        
-        this.direction = direction;
+        checkRotationCollision();
 
-        block[0].x = tempBlock[0].x;
-        block[0].y = tempBlock[0].y;
-        block[1].x = tempBlock[1].x;
-        block[1].y = tempBlock[1].y;
-        block[2].x = tempBlock[2].x;
-        block[2].y = tempBlock[2].y;
-        block[3].x = tempBlock[3].x;
-        block[3].y = tempBlock[3].y;
+        if (leftCollision == false && rightCollision == false && bottomCollision == false) {
+            this.direction = direction;
+
+            block[0].x = tempBlock[0].x;
+            block[0].y = tempBlock[0].y;
+            block[1].x = tempBlock[1].x;
+            block[1].y = tempBlock[1].y;
+            block[2].x = tempBlock[2].x;
+            block[2].y = tempBlock[2].y;
+            block[3].x = tempBlock[3].x;
+            block[3].y = tempBlock[3].y;
+            }
        }
     
     public void update() {    
-        autoDropCounter ++; // counter increases in every frame,
         
         if (KeyHandler.upPressed) {
                 switch (direction) {
@@ -83,37 +103,7 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
 
         checkMovementCollision();
 
-        if (KeyHandler.leftPressed) {
-            if (leftCollision == false) {
-                block[0].x -= Block.SIZE;
-                block[1].x -= Block.SIZE;
-                block[2].x -= Block.SIZE;
-                block[3].x -= Block.SIZE;
-                KeyHandler.leftPressed = false;
-            }
-            
-        }
-        if (KeyHandler.rightPressed) {
-            if (rightCollision == false) {
-                block[0].x += Block.SIZE;
-                block[1].x += Block.SIZE;
-                block[2].x += Block.SIZE;
-                block[3].x += Block.SIZE;
-                KeyHandler.rightPressed = false;
-            }
-        }
-        
-        if (autoDropCounter == PlayManager.dropInterval) {
-            // mino goes down
-            if (bottomCollision == false) {
-                block[0].y += Block.SIZE;
-                block[1].y += Block.SIZE;
-                block[2].y += Block.SIZE;
-                block[3].y += Block.SIZE;
-                autoDropCounter = 0; // reset
-            }
-
-            // move the mino
+        // move the mino
             if (KeyHandler.downPressed) {
                 if (bottomCollision == false) {
                     block[0].y += Block.SIZE;
@@ -124,6 +114,39 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
                     autoDropCounter = 0;
                 }
                 KeyHandler.downPressed = false;
+            }
+
+        if (KeyHandler.leftPressed) {
+            if (leftCollision == false) {
+                block[0].x -= Block.SIZE;
+                block[1].x -= Block.SIZE;
+                block[2].x -= Block.SIZE;
+                block[3].x -= Block.SIZE;
+            }
+            KeyHandler.leftPressed = false;
+
+        }
+        if (KeyHandler.rightPressed) {
+            if (rightCollision == false) {
+                block[0].x += Block.SIZE;
+                block[1].x += Block.SIZE;
+                block[2].x += Block.SIZE;
+                block[3].x += Block.SIZE;
+            }
+            KeyHandler.rightPressed = false;
+        }
+        
+        if (bottomCollision) {
+            active = false;
+        } else {
+            autoDropCounter ++; // counter increases in every frame,
+            if (autoDropCounter == PlayManager.dropInterval) {
+            // mino goes down
+                block[0].y += Block.SIZE;
+                block[1].y += Block.SIZE;
+                block[2].y += Block.SIZE;
+                block[3].y += Block.SIZE;
+                autoDropCounter = 0; // reset
             }
         }
     }
