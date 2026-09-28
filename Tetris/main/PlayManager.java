@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 import java.util.Random;
 
 import mino.Block;
@@ -34,6 +35,11 @@ public class PlayManager { // point of this class is to draw the play area
     Mino currentMino;
     final int MINO_START_X;
     final int MINO_START_Y;
+    
+    Mino nextMino;
+    final int NEXTMINO_X;
+    final int NEXTMINO_Y;
+    public static ArrayList<Block> staticBlocks = new ArrayList<>(); // blocks that are already placed in the play area
 
     // others
     public static int dropInterval = 15;
@@ -50,10 +56,16 @@ public class PlayManager { // point of this class is to draw the play area
         MINO_START_X = left_x + (WIDTH/2) - Block.SIZE;
         MINO_START_Y = top_y + Block.SIZE;
 
+
+        NEXTMINO_X = right_x + 175;
+        NEXTMINO_Y = top_y + 500;
+
         // set mino
         currentMino = pickMino();
         currentMino.setXY(MINO_START_X, MINO_START_Y);
 
+        nextMino = pickMino();
+        nextMino.setXY(NEXTMINO_X, NEXTMINO_Y); 
     }
 
     private Mino pickMino() {
@@ -74,7 +86,22 @@ public class PlayManager { // point of this class is to draw the play area
     }
 
     public void update() {
-        currentMino.update();
+
+        // check if current mino is active
+        if (currentMino.active == false) {
+            staticBlocks.add(currentMino.block[0]);
+            staticBlocks.add(currentMino.block[1]);
+            staticBlocks.add(currentMino.block[2]);
+            staticBlocks.add(currentMino.block[3]);
+
+            // replace current mino with next mino
+            currentMino = nextMino;
+            currentMino.setXY(MINO_START_X, MINO_START_Y);
+            nextMino = pickMino();
+            nextMino.setXY(NEXTMINO_X, NEXTMINO_Y);
+        } else {
+            currentMino.update();
+        }
     }
 
     public void draw(Graphics2D g2) {
@@ -97,6 +124,13 @@ public class PlayManager { // point of this class is to draw the play area
             currentMino.draw(g2);
         }   
 
+        // draw next mino
+        nextMino.draw(g2);
+
+        for (int i = 0; i < staticBlocks.size(); i++) {
+            staticBlocks.get(i).draw(g2); 
+        }
+        
         g2.setColor(Color.YELLOW);
         g2.setFont(g2.getFont().deriveFont(50f) );
         if (KeyHandler.pausePressed) {
