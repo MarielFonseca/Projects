@@ -1,83 +1,63 @@
 
 from logging import root
-
-
-global str, char_binary_mapping
-str = "AABBBBCCCCDEFFGHHHIIIII"
-char_binary_mapping = {}
+from typing import Counter
 
 
 class HuffmanNode:
-    def __init__(self, char, freq, left, right):
-        self.char = char
+    def __init__(self, token, freq, left = None, right = None):
+        self.token = token
         self.freq = freq
         self.left = left
         self.right = right
 
-def generate_tree(mapping):
+def generate_tree(frequencies):
     
-    keyset = mapping.keys() # get all the keys in the dictionary
-    priorityQ = []
+    priorityQ = [
+        HuffmanNode(token, freq)
+        for token, freq in frequencies.items()
+    ]
 
-    # for all char in keyset, create a node corresponding to the character and its frequency.
-    for char in keyset:
-        node = HuffmanNode(char, mapping[char], None, None)
-        priorityQ.append(node)
-        priorityQ = sorted(priorityQ, key= lambda x: x.freq) # sorting the list based on frequency
+    priorityQ.sort(key=lambda node: node.freq)
 
-
-        while len(priorityQ) > 1:
-            first = priorityQ.pop(0)
-            second = priorityQ.pop(0)
-            merged_nodes = HuffmanNode("-", first.freq + second.freq, first, second) # merge the two nodes with the lowest frequency
-
-            priorityQ.append(merged_nodes)
-            priorityQ = sorted(priorityQ, key= lambda x: x.freq)
+    while len(priorityQ) > 1:
+        first = priorityQ.pop(0)
+        second = priorityQ.pop(0)
+        merged_nodes = HuffmanNode(
+            None, first.freq + second.freq, first, second
+        ) # merge the two nodes with the lowest frequency
+        priorityQ.append(merged_nodes)
+        priorityQ.sort(key= lambda node: node.freq)
     
-    return priorityQ.pop()
+    return priorityQ[0]
 
+def set_binary_codes(node, prefix, codes):
+    if not node.token is None: # leaf node
+        codes[node.token] = prefix or "0"
+        return
+
+    set_binary_codes(node.left, prefix + "0", codes)
+    set_binary_codes(node.right, prefix + "1", codes)
 
 def encode(streng): # gets the frequencies of each character in the string. stores in a dictionary
 
-    mapping = {}
+    words = streng.split()
+    if not words:
+        return '', {}
 
-    for char in streng:
-        if char not in mapping:
-            mapping[char] = 1
-        else:
-            mapping[char] += 1
+    frequencies = Counter(words)
+    root = generate_tree(frequencies)
 
-    root = generate_tree(mapping)
-    
-    set_binary_codes(root, '')
-    
-    print(' char | huffman code ')
-    for char in mapping:
-        print('%-4r | %12s' % (char, char_binary_mapping[char]))
-    
-    s = '' 
-    for char in streng:
-        s += char_binary_mapping[char]
-
-    return s
+    codes = {}
+    set_binary_codes(root, '', codes)
+    encoded = "".join(codes[word] for word in words)
+    return encoded, codes
 
 
-def set_binary_codes(node, str):
-    if not node is None:
-        if node.left is None and node.right is None: # leaf node
-            char_binary_mapping[node.char] = str
+text = "samurais fight ninjas"
+encoded, codes = encode(text)
 
-        # left
-        str += '0'
-        set_binary_codes(node.left, str)
-        str = str[:-1]
+print("Word | Huffman code")
+for word, code in codes.items():
+    print(f"{word!r} | {code}")
 
-        # right
-        str += '1'
-        set_binary_codes(node.right, str)
-        str = str[:-1]
-
-        
-
-
-print(encode(str))
+print("Encoded: ", encoded)
