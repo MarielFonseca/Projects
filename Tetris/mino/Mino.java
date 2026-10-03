@@ -8,11 +8,13 @@ import main.PlayManager;
 
 public class Mino { // super class for all tetrominoes, so all shapes will extend this class
 
-    public Block block[] = new Block[4]; // each tetromino has 4 blocks
-    public Block tempBlock[] = new Block[4];
+    public Block[] block = new Block[4]; // each tetromino has 4 blocks
+    public Block[] tempBlock = new Block[4];
     public int autoDropCounter = 0;
     public int direction = 1; // there are four directions 1-4
-    public boolean leftCollision, rightCollision, bottomCollision;
+    public boolean leftCollision;
+    public boolean rightCollision;
+    public boolean bottomCollision;
     public boolean active = true;
 
     public void create(Color color) {
@@ -40,6 +42,8 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
         rightCollision = false;
         bottomCollision = false;
 
+        checkStaticBlockCollision();
+
         for (int i = 0; i < block.length; i++) {
             if (block[i].x == PlayManager.left_x) {
                 leftCollision = true;
@@ -57,6 +61,8 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
         leftCollision = false;
         rightCollision = false;
         bottomCollision = false;
+
+        checkStaticBlockCollision();
 
         for (int i = 0; i < block.length; i++) {
             if (tempBlock[i].x < PlayManager.left_x) {
@@ -87,7 +93,37 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
             block[3].x = tempBlock[3].x;
             block[3].y = tempBlock[3].y;
             }
-       }
+    }
+
+    private void checkStaticBlockCollision() {
+
+        for (int i = 0; i < PlayManager.staticBlocks.size(); i++) {
+
+            int targetX = PlayManager.staticBlocks.get(i).x;
+            int targetY = PlayManager.staticBlocks.get(i).y;
+
+            // check down
+            for (int ii = 0; ii < block.length; ii++) {
+                if (block[ii].y + Block.SIZE == targetY && block[ii].x == targetX ) {
+                    bottomCollision = true;
+                }
+            }
+
+            // check left
+            for (int ii = 0; ii < block.length; ii++) {
+                if (block[ii].x - Block.SIZE == targetX && block[ii].y == targetY) {
+                    leftCollision = true;
+                }
+            }
+
+            // check right
+            for (int ii = 0; ii < block.length; ii++) {
+                if (block[ii].x + Block.SIZE == targetX && block[ii].y == targetY) {
+                    rightCollision = true;
+                }
+            }
+        }
+    }
     
     public void update() {    
         
