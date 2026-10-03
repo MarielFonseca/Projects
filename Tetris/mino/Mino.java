@@ -16,6 +16,8 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
     public boolean rightCollision;
     public boolean bottomCollision;
     public boolean active = true;
+    public boolean deactivating;
+    public int deactivateCounter;
 
     public void create(Color color) {
         block[0] = new Block(color);
@@ -125,7 +127,11 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
         }
     }
     
-    public void update() {    
+    public void update() {
+
+        if (deactivating) {
+            deactivating();
+        }
         
         if (KeyHandler.upPressed) {
                 switch (direction) {
@@ -173,7 +179,8 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
         }
         
         if (bottomCollision) {
-            active = false;
+            deactivating = true;
+            //active = false;
         } else {
             autoDropCounter ++; // counter increases in every frame,
             if (autoDropCounter == PlayManager.dropInterval) {
@@ -183,6 +190,21 @@ public class Mino { // super class for all tetrominoes, so all shapes will exten
                 block[2].y += Block.SIZE;
                 block[3].y += Block.SIZE;
                 autoDropCounter = 0; // reset
+            }
+        }
+    }
+
+    public void deactivating() {
+
+        deactivateCounter ++;
+
+        if (deactivateCounter == 45) {
+
+            deactivateCounter = 0;
+            checkMovementCollision();
+
+            if (bottomCollision) {
+                active = false;
             }
         }
     }
