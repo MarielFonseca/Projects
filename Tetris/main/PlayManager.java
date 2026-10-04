@@ -43,13 +43,12 @@ public class PlayManager { // point of this class is to draw the play area
 
     // others
     public static int dropInterval = 15;
+    boolean gameOver;
 
     // effect
     boolean effectCounterOn;
     int effectCounter;
     ArrayList<Integer> effectY = new ArrayList<>();
-
-
 
     public PlayManager() {
 
@@ -99,6 +98,11 @@ public class PlayManager { // point of this class is to draw the play area
             staticBlocks.add(currentMino.block[1]);
             staticBlocks.add(currentMino.block[2]);
             staticBlocks.add(currentMino.block[3]);
+
+            // check if game is over
+            if (currentMino.block[0].x == MINO_START_X && currentMino.block[0].y == MINO_START_Y) {
+                gameOver = true;
+            }
 
             currentMino.deactivating = false;
 
@@ -202,11 +206,25 @@ public class PlayManager { // point of this class is to draw the play area
                 effectY.clear();
             }
         }
-        
-        g2.setColor(Color.YELLOW);
-        g2.setFont(g2.getFont().deriveFont(50f) );
-        if (KeyHandler.pausePressed) {
+
+        g2.setFont(new Font("Arial", Font.BOLD, 50) );
+
+
+        if (gameOver) {
+            g2.setColor(Color.RED);
+            g2.drawString("GAME OVER", left_x + 25, top_y + 320);
+        }
+
+        else if (KeyHandler.pausePressed) {
+            g2.setColor(Color.YELLOW);
             g2.drawString("PAUSED", left_x + 76, top_y + 300);
         }
+
+        x = 35;
+        y = top_y + 320;
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Times New Roman", Font.ITALIC, 40) );
+        g2.drawString("SIMPLE TETRIS", x, y);
+
     }   
 }
