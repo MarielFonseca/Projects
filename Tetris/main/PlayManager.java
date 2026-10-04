@@ -44,6 +44,12 @@ public class PlayManager { // point of this class is to draw the play area
     // others
     public static int dropInterval = 15;
 
+    // effect
+    boolean effectCounterOn;
+    int effectCounter;
+    ArrayList<Integer> effectY = new ArrayList<>();
+
+
 
     public PlayManager() {
 
@@ -129,6 +135,9 @@ public class PlayManager { // point of this class is to draw the play area
 
                  if (blockCount == 12) {
 
+                     effectCounterOn = true;
+                     effectY.add(y);
+
                      for (int i = staticBlocks.size() - 1; i > -1; i--) {
                          // remove all block in current y line
                          if (staticBlocks.get(i).y == y) {
@@ -176,6 +185,22 @@ public class PlayManager { // point of this class is to draw the play area
 
         for (int i = 0; i < staticBlocks.size(); i++) {
             staticBlocks.get(i).draw(g2); 
+        }
+
+        // draw effect
+        if (effectCounterOn) {
+            effectCounter++;
+
+            g2.setColor(Color.RED);
+            for (int i = 0; i < effectY.size(); i++) {
+                g2.fillRect(left_x, effectY.get(i), WIDTH, Block.SIZE);
+            }
+
+            if (effectCounter == 12) {
+                effectCounterOn = false;
+                effectCounter = 0;
+                effectY.clear();
+            }
         }
         
         g2.setColor(Color.YELLOW);
